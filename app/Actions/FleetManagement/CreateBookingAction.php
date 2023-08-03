@@ -5,7 +5,7 @@ namespace App\Actions\FleetManagement;
 use App\Data\BookingData;
 use App\Models\Booking;
 
-class GetAvailableSeatsForOriginDestinationAction
+class CreateBookingAction
 {
     public function __invoke(BookingData $bookingData): Booking
     {

@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\API\AuthController;
+use App\Http\Controllers\API\BookingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,7 +14,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->prefix('trips')->group(function(){
+    Route::get('find-available-seats', [BookingController::class, 'findAvailableSeats']);
+    Route::post('book-trip-seat', [BookingController::class, 'bookTripSeat']);
 });

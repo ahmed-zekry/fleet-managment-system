@@ -3,6 +3,7 @@
 namespace App\Actions\FleetManagement;
 
 use App\Models\Seat;
+use Illuminate\Support\Collection;
 
 class GetAvailableSeatsForOriginDestinationAction
 {
@@ -18,7 +19,7 @@ class GetAvailableSeatsForOriginDestinationAction
         $this->getAvailableTripForOriginDistination = new GetAvailableTripForOriginDistinationAction();
     }
 
-    public function __invoke()
+    public function __invoke(): Collection
     {
         $this->availableTrips = ($this->getAvailableTripForOriginDistination)($this->originCityId, $this->destinationCityId);
 
