@@ -4,7 +4,7 @@ namespace App\Actions\FleetManagement;
 
 use App\Models\Trip;
 
-class GetAvailableTripForOriginDistination
+class GetAvailableTripForOriginDistinationAction
 {
     public function __invoke(int $originCityId, int $destinationCityId): array
     {
