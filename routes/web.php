@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\BusController;
 use App\Http\Controllers\Admin\CityController;
 use App\Http\Controllers\Admin\TripController;
+use App\Http\Controllers\Admin\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,4 +44,6 @@ Route::middleware([
     Route::get('trip/create', [TripController::class, 'create']);
     Route::get('trip/edit/{trip}', [TripController::class, 'create']);
     Route::post('trip/delete/{trip}', [TripController::class, 'delete']);
+
+    Route::get('booking', [BookingController::class, 'index'])->name('booking');
 });

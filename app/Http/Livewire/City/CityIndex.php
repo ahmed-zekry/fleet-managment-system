@@ -13,7 +13,7 @@ class CityIndex extends Component
     public function render()
     {
         return view('livewire.city.city-index', [
-            'cities' => City::orderBy('name')->paginate(10)
+            'cities' => City::orderBy('name')->paginate(15)
         ]);
     }
 }

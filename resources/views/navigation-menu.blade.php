@@ -24,6 +24,9 @@
                     <x-nav-link href="{{ route('trip') }}" :active="request()->routeIs('trip')">
                         {{ __('Trips') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('booking') }}" :active="request()->routeIs('booking')">
+                        {{ __('Bookings') }}
+                    </x-nav-link>
                 </div>
             </div>
 

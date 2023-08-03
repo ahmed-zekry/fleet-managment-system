@@ -10,7 +10,7 @@ class TripIndex extends Component
     public function render()
     {
         return view('livewire.trip.trip-index', [
-            'trips' => Trip::orderBy('id', 'desc')->with('cities')->paginate(10)
+            'trips' => Trip::orderBy('id', 'desc')->with('cities')->paginate(15)
         ]);
     }
 }

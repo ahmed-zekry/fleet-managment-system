@@ -9,6 +9,10 @@ class CreateBookingAction
 {
     public function __invoke(BookingData $bookingData): Booking
     {
-        return Booking::create( $bookingData->toArray() );
+        $data = $bookingData->toArray();
+
+        $data['intermediate_cities'] = (new GetTripIntermediateCitiesAction())($data['trip_id'], $data['origin_city_id'], $data['destination_city_id']);
+
+        return Booking::create( $data );
     }
 }
