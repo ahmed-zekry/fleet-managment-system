@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Seat;
 use App\Models\Trip;
 use App\Data\TripData;
+use App\Models\Booking;
 use Livewire\Component;
 
 class TripForm extends Component
@@ -19,6 +20,7 @@ class TripForm extends Component
     public $trip_route_cities;
     public $cities;
     public $city_id;
+    public $error_msg = '';
 
     public $rules = [
         'trip_number' => 'required|unique:trips,trip_number',
@@ -40,9 +42,23 @@ class TripForm extends Component
         }
     }
 
+    public function updated($property)
+    {
+        if($property == 'bus_id' && $this->tripDoesntHaveBookings() === false) {
+            $this->error_msg = 'You can not change the trip route because the trip alread has bookings.';
+            $this->bus_id = $this->trip->bus_id;
+            return false;
+        }
+    }
+
     public function save()
     {
         $data = $this->validate();
+
+        if($this->trip_route_cities->count() < 2) {
+            $this->error_msg = 'You must add at lease 2 cities to the trip route';
+            return false;
+        }
 
         if($this->trip) {
             $this->trip->update(TripData::from($data)->toArray());
@@ -53,15 +69,33 @@ class TripForm extends Component
 
         $this->trip->cities()->attach($this->attachRouteCities());
 
-        $this->addTripBusSeats();
+        if( $this->tripAvailableSeatsDoesntMatchBusNumberOfSeats() &&
+            $this->tripDoesntHaveBookings() ) {
+                $this->addTripBusSeats();
+        }
 
         session()->flash('successMsg', __('Trip data has been saved.'));
         return redirect('/trip');
     }
 
+    public function tripAvailableSeatsDoesntMatchBusNumberOfSeats()
+    {
+        return $this->trip->bus->number_of_seats > $this->trip->seats()->count();
+    }
+
+    public function tripDoesntHaveBookings()
+    {
+        if(!$this->trip){
+            return true;
+        }
+
+        return Booking::where('trip_id', $this->trip->id)->count() == 0 ? true : false;
+    }
+
     public function addTripBusSeats()
     {
         $this->trip->seats()->delete();
+
         for($i=1; $i<=$this->trip->bus->number_of_seats; $i++){
             $this->trip->seats()->save(
                 Seat::create([
@@ -104,6 +138,11 @@ class TripForm extends Component
 
     public function addCityToTripRoute()
     {
+        if($this->tripDoesntHaveBookings() === false) {
+            $this->error_msg = 'You can not change the trip route because the trip alread has bookings.';
+            return false;
+        }
+
         if($this->city_id && !$this->cityExistsOnTheRoute($this->city_id)){
             $city = $this->findSelectedCity($this->city_id);
 
@@ -129,6 +168,11 @@ class TripForm extends Component
 
     public function updateRouteSourting($route_list)
     {
+        if($this->tripDoesntHaveBookings() === false) {
+            $this->error_msg = 'You can not change the trip route because the trip alread has bookings.';
+            return false;
+        }
+
         $new_collection = Collect();
 
         foreach($route_list as $k => $list_item){
