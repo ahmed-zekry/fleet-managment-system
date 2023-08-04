@@ -1,66 +1,162 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Fleet Management System (Bus Booking System)
+- The Bus Booking System facilitates seat reservations for trips that traverse multiple cities, including intermediate stops. For example, a trip from Cairo to Aswan may pass through Alfayoum, Almenya, and Sohag.
+- Users have the freedom to reserve available seats for trips connecting any two cities along the designated route.
+- The system rigorously enforces validations to ensure that users can exclusively book seats that are currently available.
+## What This Project Offers:
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+- The Admin Area empowers administrators to efficiently manage cities, buses, trips, and bookings.
+- The system offers a range of APIs:
+  - Authentication APIs (Login, Registration)
+  - Trips APIs (Search for available seats, Book available seat) (*Note: These APIs are accessible to authenticated users only*)
 
-## About Laravel
+## Admin Area Access:
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Simply open the web application's homepage, and you will be automatically redirected to the dashboard login. No additional configurations are required except installing the provided database dump located in the project's designated database folder.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Admin Credentials:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- Email: admin@admin.com
+- Password: fl$$t@pp
+## API Documentation:
 
-## Learning Laravel
+### Registration
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**POST** `/api/register`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**Body**:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+```json
+{
+    "name": "willsmith",
+    "email": "willsmith@email.com",
+    "password": "12345"
+}
+```
+**Response**:
+```json
+{
+    "data": {
+        "user": {
+            "name": "willsmith",
+            "email": "willsmith@email.com",
+            "updated_at": "2023-08-04T00:09:00.000000Z",
+            "created_at": "2023-08-04T00:09:00.000000Z",
+            "id": 22,
+            "profile_photo_url": "https://ui-avatars.com/api/?name=A&color=7F9CF5&background=EBF4FF"
+        }
+    },
+    "message": "User account created."
+}
+```
 
-## Laravel Sponsors
+### Login:
+**POST** `/api/login`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+**Body**:
 
-### Premium Partners
+```json
+{
+    "email": "willsmith@email.com",
+    "password": "12345"
+}
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+**Response**:
+```json
+{
+    "data": {
+        "user": {
+            "id": 22,
+            "name": "Ahmed",
+            "email": "ahmed@zekry.com",
+            "email_verified_at": null,
+            "two_factor_confirmed_at": null,
+            "current_team_id": null,
+            "profile_photo_path": null,
+            "created_at": "2023-08-04T00:09:00.000000Z",
+            "updated_at": "2023-08-04T00:09:00.000000Z",
+            "profile_photo_url": "https://ui-avatars.com/api/?name=A&color=7F9CF5&background=EBF4FF"
+        },
+        "token": "1|DwnF8EnHc8Y9rhDcY1S0Tl4LBK2hWXWPlxomIP7d"
+    },
+    "mesasge": "Successful login"
+}
+```
 
-## Contributing
+### Find Available Seats For Specific Origin and Destination:
+**POST** `/api/trips/find-available-seats`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Body**:
 
-## Code of Conduct
+```json
+{
+    "origin_city_id": 1,
+    "destination_city_id": 7
+}
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Response**:
+```json
+{
+    "data": {
+        "available_seats": [
+            {
+                "seat_id": 2,
+                "seat_number": "1613f",
+                "trip_id": 1,
+                "bus_id": 1,
+                "trip_number": "T9980",
+                "bus_plate_number": "B-335"
+            },
+            {
+                "seat_id": 17,
+                "seat_number": "a0d34",
+                "trip_id": 2,
+                "bus_id": 2,
+                "trip_number": "T8795",
+                "bus_plate_number": "B-549"
+            }
+        ]
+    }
+}
+```
 
-## Security Vulnerabilities
+### Book Available Seat For Specific Origin and Destination:
+**POST** `/api/trips/find-available-seats`
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**Body**:
 
-## License
+```json
+{
+    "trip_id": 1,
+    "seat_id": 2,
+    "origin_city_id": 1,
+    "destination_city_id": 7
+}
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**Response**:
+```json
+{
+    "data": {
+        "booking": {
+            "trip_id": 1,
+            "seat_id": 2,
+            "user_id": 22,
+            "origin_city_id": 1,
+            "destination_city_id": 7,
+            "intermediate_cities": [
+                2,
+                3,
+                5,
+                4,
+                6
+            ],
+            "updated_at": "2023-08-04T01:09:27.000000Z",
+            "created_at": "2023-08-04T01:09:27.000000Z",
+            "id": 3
+        }
+    },
+    "message": "Congratuations, your seat has been bookd. Have a nice trip :)"
+}
+```
