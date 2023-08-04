@@ -41,8 +41,9 @@ class GetAvailableSeatsForOriginDestinationAction
 
     private function findSeats(int $tripId, array $tripRouteCities, array $tripRouteCitiesWithoutDestination)
     {
-        return Seat::selectRaw('seats.id as seat_id, seats.seat_number, seats.trip_id, trips.bus_id, trips.trip_number')
+        return Seat::selectRaw('seats.id as seat_id, seats.seat_number, seats.trip_id, trips.bus_id, trips.trip_number, buses.plate_number as bus_plate_number')
             ->join('trips', 'trips.id', 'seats.trip_id')
+            ->join('buses', 'buses.id', 'trips.bus_id')
             ->where('seats.trip_id', $tripId)
             ->whereNotIn('seats.id', function ($query) use ($tripRouteCities, $tripRouteCitiesWithoutDestination) {
                 $query->select('seat_id')
