@@ -11,8 +11,7 @@
 
 ## Admin Area Access:
 
-- Simply open the web application's homepage, and you will be automatically redirected to the dashboard login. No additional configurations are required except installing the provided database dump located in the project's designated database folder.
-- you also need to run ```json npm install ``` and ```json npm run build ```
+- Simply open the web application's homepage, and you will be automatically redirected to the dashboard login. No additional configurations are required except installing the provided database dump located in the project's designated database folder, you may also need to run ``` npm install ```  and  ``` npm run build ```
 
 ## Admin Credentials:
 
